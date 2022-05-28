@@ -75,6 +75,13 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(reviews);
         })
 
+        //post a review
+        app.post('/review', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.send(result);
+        })
+
     }
     finally {
     }

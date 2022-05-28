@@ -46,6 +46,13 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(orders);
         });
 
+        //place an order 
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
+        });
+
     }
     finally {
     }

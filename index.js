@@ -82,6 +82,14 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(result);
         })
 
+        // get review by id
+        app.get('/review/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const review = await reviewCollection.findOne(query);
+            res.send(review);
+        });
+
     }
     finally {
     }

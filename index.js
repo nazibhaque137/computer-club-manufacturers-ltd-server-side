@@ -47,8 +47,8 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         //delete an item
         app.delete('/item/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await itemCollection.deleteOne(query);
+            const filter = { id: id };
+            const result = await itemCollection.deleteOne(filter);
             res.send(result);
         });
 

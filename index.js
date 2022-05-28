@@ -37,7 +37,15 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             const item = await itemCollection.findOne(query);
             res.send(item);
         });
-        
+
+        app.get('/order', async (req, res) => {
+            const user = req.query.user;
+            const query = { user: user };
+            const cursor = orderCollection.find(query);
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
+
     }
     finally {
     }

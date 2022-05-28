@@ -38,6 +38,12 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(item);
         });
 
+        app.post('/item', async (req, res) => {
+            const item = req.body;
+            const result = await itemCollection.insertOne(item);
+            res.send(result);
+        })
+
         app.get('/order', async (req, res) => {
             const user = req.query.user;
             const query = { user: user };

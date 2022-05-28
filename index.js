@@ -43,6 +43,14 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             const result = await itemCollection.insertOne(item);
             res.send(result);
         })
+       
+        //delete an item
+        app.delete('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await itemCollection.deleteOne(query);
+            res.send(result);
+        });
 
         app.get('/order', async (req, res) => {
             const user = req.query.user;

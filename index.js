@@ -163,7 +163,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             const users = await userCollection.find().toArray();
             res.send(users);
         });
-
+/*
         //get user by id
         app.get('/user/:id', async (req, res) => {
             const id = req.params.id;
@@ -172,6 +172,27 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(user);
         });
 
+        //delete a user
+        app.delete('/user/:id', async (req, res) => {
+            const id = req.params._id;
+            const filter = { id: id };
+            const result = await itemCollection.deleteOne(filter);
+            res.send(result);
+        });
+
+        //update modified user
+        app.put('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const user = req.body;
+            const filter = { id: id };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: item,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
+        */
         //get an admin by email
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;

@@ -157,42 +157,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             const review = await reviewCollection.findOne(query);
             res.send(review);
         });
-
-        //get all users
-        app.get('/user', async (req, res) => {
-            const users = await userCollection.find().toArray();
-            res.send(users);
-        });
-/*
-        //get user by id
-        app.get('/user/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const user = await userCollection.findOne(query);
-            res.send(user);
-        });
-
-        //delete a user
-        app.delete('/user/:id', async (req, res) => {
-            const id = req.params._id;
-            const filter = { id: id };
-            const result = await itemCollection.deleteOne(filter);
-            res.send(result);
-        });
-
-        //update modified user
-        app.put('/user/:id', async (req, res) => {
-            const id = req.params.id;
-            const user = req.body;
-            const filter = { id: id };
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: item,
-            };
-            const result = await userCollection.updateOne(filter, updateDoc, options);
-            res.send(result);
-        });
-        */
+        
         //get an admin by email
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
@@ -213,6 +178,22 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(result);
         });
 
+        //get all users
+        app.get('/user', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users);
+        });
+
+        //post or place order
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        })
+
+        
         //update user
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;

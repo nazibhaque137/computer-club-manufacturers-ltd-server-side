@@ -11,6 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.sahbn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -97,6 +98,13 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             const orders = await cursor.toArray();
             res.send(orders);
         });
+
+        //post or place order
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
+        })
 
        //get order by id
         app.get('/order/:id', async (req, res) => {
@@ -196,6 +204,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
 }
 
 run().catch(console.dir);
+
 
 app.get('/', async (req, res) => {
     res.send('Computer Manufacturer Server running');

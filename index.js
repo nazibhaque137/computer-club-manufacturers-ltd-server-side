@@ -164,6 +164,14 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(users);
         });
 
+        //get user by id
+        app.get('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const user = await userCollection.findOne(query);
+            res.send(user);
+        });
+
         //get an admin by email
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;

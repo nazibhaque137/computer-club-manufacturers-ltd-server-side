@@ -108,7 +108,6 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(order);
         })
 
-                $set: item,
         //delete an order by id
         app.delete('/order/:id', async (req, res) => {
             const id = req.params.id;

@@ -87,8 +87,6 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
                 $set: item,
             };
             const result = await itemCollection.updateOne(filter, updateDoc, options);
-            //const token = jwt.sign({ id: id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
-           // res.send(result, token);
             res.send(result);
         });
 
@@ -126,8 +124,6 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
                 $set: order,
             };
             const result = await orderCollection.updateOne(filter, updateDoc, options);
-            //const token = jwt.sign({ id: id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
-            // res.send(result, token);
             res.send(result);
         });
 
@@ -190,8 +186,6 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
                 $set: user,
             };
             const result = await userCollection.updateOne(filter, updateDoc, options);
-            //const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
-            //res.send(result, token);
             res.send(result);
         });
 

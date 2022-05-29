@@ -49,7 +49,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
                 res.status(403).send({ message: 'forbidden' });
             }
         }
-        //get all items
+        ///get all items
         app.get('/item', async (req, res) => {
             const query = {};
             const cursor = itemCollection.find(query);
@@ -91,7 +91,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(result);
         });
 
-        //get all orders of all users
+        ///get all orders of all users
         app.get('/order', async (req, res) => {
             const query = {};
             const cursor = orderCollection.find(query);
@@ -99,20 +99,22 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(orders);
         });
 
-        //post or place order
-        app.post('/order', async (req, res) => {
-            const order = req.body;
-            const result = await orderCollection.insertOne(order);
-            res.send(result);
-        })
-
-       //get order by id
+        ///get order by id
         app.get('/order/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const order = await orderCollection.findOne(query);
             res.send(order);
         })
+
+        ///post or place order
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
+        })
+
+
 
         //delete an order by id
         app.delete('/order/:id', async (req, res) => {
@@ -158,7 +160,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(review);
         });
         
-        //get an admin by email
+        ///get an admin by email
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
@@ -166,7 +168,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send({ admin: isAdmin })
         })
 
-        //update after making a user an admin
+        ///update after making a user an admin
         app.put('/user/admin/:email', async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
@@ -178,7 +180,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(result);
         });
 
-        //get all users
+        ///get all users
         app.get('/user', async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
@@ -194,7 +196,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         })
 
         
-        //update user
+        ///update user
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;

@@ -206,7 +206,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
                 $set: user,
             };
             const result = await userCollection.updateOne(filter, updateDoc, options);
-            res.send(result);
+            res.send(result);  
         });
 
 

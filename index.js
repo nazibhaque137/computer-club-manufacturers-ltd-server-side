@@ -58,7 +58,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         })
 
         //add an item to existing items
-        app.post('/item', async (req, res) => {
+        app.post('/item', verifyJWT, verifyAdmin, async (req, res) => {
             const item = req.body;
             const result = await itemCollection.insertOne(item);
             res.send(result);
@@ -74,7 +74,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
 
        
         //delete an item
-        app.delete('/item/:id', async (req, res) => {
+        app.delete('/item/:id', verifyJWT, verifyAdmin, async (req, res) => {
             const id = req.params.id;
             const filter = { id: id };
             const result = await itemCollection.deleteOne(filter);
@@ -82,8 +82,8 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         });
 
     
-        ///get all orders 
-        app.get('/order', async (req, res) => {
+        ///get order filter by user (email)
+        app.get('/order', verifyJWT, async (req, res) => {
             const user = req.query.user;
                 const query = { user: user };
                 const orders = await orderCollection.find(query).toArray();
@@ -92,7 +92,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
 
 
         ///get an order by order id
-        app.get('/order/:id', async (req, res) => {
+        app.get('/order/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const order = await orderCollection.findOne(query);
@@ -100,7 +100,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         })
 
         //delete an order by id
-        app.delete('/order/:id', async (req, res) => {
+        app.delete('/order/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const filter = { id: id };
             const result = await orderCollection.deleteOne(filter);
@@ -108,7 +108,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         });
 
         ///post or place order
-        app.post('/order', async (req, res) => {
+        app.post('/order', verifyJWT, async (req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
             res.send(result);
@@ -123,7 +123,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         })
 
         //post a review
-        app.post('/review', async (req, res) => {
+        app.post('/review', verifyJWT, async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
             res.send(result);
@@ -138,7 +138,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         });
 
         ///get all users
-        app.get('/user', async (req, res) => {
+        app.get('/user', verifyJWT, verifyAdmin, async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
             const users = await cursor.toArray();
@@ -147,7 +147,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
 
 
         ///get an admin by email
-        app.get('/admin/:email', async (req, res) => {
+        app.get('/admin/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
             const isAdmin = user.role === 'admin';
@@ -155,7 +155,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         })
 
         ///update after making a user an admin
-        app.put('/user/admin/:email', async (req, res) => {
+        app.put('/user/admin/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
             const options = { upsert: true };
@@ -167,7 +167,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         });
 
         ///save updated user info 
-        app.put('/user/:email', async (req, res) => {
+        app.put('/user/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const user = req.body;
             const filter = { email: email };

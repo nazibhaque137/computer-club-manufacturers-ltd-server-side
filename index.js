@@ -11,7 +11,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.sahbn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -51,70 +50,54 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
         }
         ///get all items
         app.get('/item', async (req, res) => {
-            const query = {};
+            const item = req.query.item;
+            const query = { item: item };
             const cursor = itemCollection.find(query);
             const items = await cursor.toArray();
             res.send(items);
         })
-        //get item by id
+
+        //add an item to existing items
+        app.post('/item', async (req, res) => {
+            const item = req.body;
+            const result = await itemCollection.insertOne(item);
+            res.send(result);
+        })
+
+        //get an item by id
         app.get('/item/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const item = await itemCollection.findOne(query);
             res.send(item);
         });
-        //add an item
-        app.post('/item', async (req, res) => {
-            const item = req.body;
-            const result = await itemCollection.insertOne(item);
-            res.send(result);
-        })
+
        
         //delete an item
         app.delete('/item/:id', async (req, res) => {
-            const id = req.params._id;
+            const id = req.params.id;
             const filter = { id: id };
             const result = await itemCollection.deleteOne(filter);
             res.send(result);
         });
 
-        //update modified item
-        app.put('/item/:id', async (req, res) => {
-            const id = req.params.id;
-            const item = req.body;
-            const filter = { id: id };
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: item,
-            };
-            const result = await itemCollection.updateOne(filter, updateDoc, options);
-            res.send(result);
-        });
-
-        ///get all orders of all users
+    
+        ///get all orders 
         app.get('/order', async (req, res) => {
-            const query = {};
-            const cursor = orderCollection.find(query);
-            const orders = await cursor.toArray();
-            res.send(orders);
+            const user = req.query.user;
+                const query = { user: user };
+                const orders = await orderCollection.find(query).toArray();
+                return res.send(orders);
         });
 
-        ///get order by id
+
+        ///get an order by order id
         app.get('/order/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const order = await orderCollection.findOne(query);
             res.send(order);
         })
-
-        ///post or place order
-        app.post('/order', async (req, res) => {
-            const order = req.body;
-            const result = await orderCollection.insertOne(order);
-            res.send(result);
-        })
-
-
 
         //delete an order by id
         app.delete('/order/:id', async (req, res) => {
@@ -124,18 +107,12 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(result);
         });
 
-        //update modified order
-        app.put('/order/:id', async (req, res) => {
-            const id = req.params.id;
+        ///post or place order
+        app.post('/order', async (req, res) => {
             const order = req.body;
-            const filter = { id: id };
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: order,
-            };
-            const result = await orderCollection.updateOne(filter, updateDoc, options);
+            const result = await orderCollection.insertOne(order);
             res.send(result);
-        });
+        })
 
         //get all reviews
         app.get('/review', async (req, res) => {
@@ -159,7 +136,16 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             const review = await reviewCollection.findOne(query);
             res.send(review);
         });
-        
+
+        ///get all users
+        app.get('/user', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users);
+        });
+
+
         ///get an admin by email
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
@@ -180,23 +166,7 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
             res.send(result);
         });
 
-        ///get all users
-        app.get('/user', async (req, res) => {
-            const query = {};
-            const cursor = userCollection.find(query);
-            const users = await cursor.toArray();
-            res.send(users);
-        });
-
-        //post or place order
-        app.post('/user', async (req, res) => {
-            const user = req.body;
-            const result = await userCollection.insertOne(user);
-            res.send(result);
-        })
-
-        
-        ///update user
+        ///save updated user info 
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
@@ -215,6 +185,9 @@ const reviewCollection = client.db("computerManufacturer").collection("review");
     }
 }
 
+
+
+
 run().catch(console.dir);
 
 
@@ -225,4 +198,7 @@ app.get('/', async (req, res) => {
 app.listen(port, () => {
     console.log(`Computer Manufacturer Server is Listening on port ${port}`)
 })
+
+
+
 
